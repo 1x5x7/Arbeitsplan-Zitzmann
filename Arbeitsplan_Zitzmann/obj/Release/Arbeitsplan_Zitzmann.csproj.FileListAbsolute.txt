@@ -1,0 +1,11 @@
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\bin\Release\Arbeitsplan_Zitzmann.exe.config
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\bin\Release\Arbeitsplan_Zitzmann.exe
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\bin\Release\Arbeitsplan_Zitzmann.pdb
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\obj\Release\Arbeitsplan_Zitzmann.csprojAssemblyReference.cache
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\obj\Release\Arbeitsplan_Zitzmann.Arbeitsplan.resources
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\obj\Release\Arbeitsplan_Zitzmann.Arbeitsplan_Tabelle.resources
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\obj\Release\Arbeitsplan_Zitzmann.Properties.Resources.resources
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\obj\Release\Arbeitsplan_Zitzmann.csproj.GenerateResource.cache
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\obj\Release\Arbeitsplan_Zitzmann.csproj.CoreCompileInputs.cache
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\obj\Release\Arbeitsplan_Zitzmann.exe
+C:\Users\Robert\Desktop\PROJECTS\C#\Arbeitsplan_Zitzmann\Arbeitsplan_Zitzmann\obj\Release\Arbeitsplan_Zitzmann.pdb
