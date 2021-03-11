@@ -8,7 +8,7 @@ namespace Arbeitsplan_Zitzmann
 {
     static class Program
     {
-        // version 1.0 
+        // current version of Mar. 2021
         public static string version = "1.0";
 
         public static System.DateTime current_time = System.DateTime.Now;
@@ -16,6 +16,7 @@ namespace Arbeitsplan_Zitzmann
 
         public static Arbeitsplan menu = new Arbeitsplan();
         public static Arbeitsplan_Tabelle table = new Arbeitsplan_Tabelle();
+        public static Arbeitsplan_Einstellungen settings = new Arbeitsplan_Einstellungen();
 
         [STAThread]
         static void Main()

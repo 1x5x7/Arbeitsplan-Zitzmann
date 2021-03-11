@@ -133,5 +133,10 @@ namespace Arbeitsplan_Zitzmann
 
             Program.table.Show();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Program.settings.ShowDialog();
+        }
     }
 }

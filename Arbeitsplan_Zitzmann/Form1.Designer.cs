@@ -35,6 +35,7 @@
             this.month_selection_combobox = new System.Windows.Forms.ComboBox();
             this.create_table_button = new System.Windows.Forms.Button();
             this.creator_tag = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // which_user_label
@@ -89,7 +90,7 @@
             // 
             this.create_table_button.Location = new System.Drawing.Point(211, 282);
             this.create_table_button.Name = "create_table_button";
-            this.create_table_button.Size = new System.Drawing.Size(252, 23);
+            this.create_table_button.Size = new System.Drawing.Size(252, 49);
             this.create_table_button.TabIndex = 4;
             this.create_table_button.Text = "Tabelle anzeigen";
             this.create_table_button.UseVisualStyleBackColor = true;
@@ -106,11 +107,22 @@
             this.creator_tag.TabIndex = 5;
             this.creator_tag.Text = "Version X / Robert Schmidt";
             // 
+            // button1
+            // 
+            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
+            this.button1.Location = new System.Drawing.Point(608, 388);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(40, 40);
+            this.button1.TabIndex = 6;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Arbeitsplan
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(659, 433);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.creator_tag);
             this.Controls.Add(this.create_table_button);
             this.Controls.Add(this.month_selection_combobox);
@@ -138,6 +150,7 @@
         private System.Windows.Forms.ComboBox month_selection_combobox;
         private System.Windows.Forms.Button create_table_button;
         private System.Windows.Forms.Label creator_tag;
+        private System.Windows.Forms.Button button1;
     }
 }
 

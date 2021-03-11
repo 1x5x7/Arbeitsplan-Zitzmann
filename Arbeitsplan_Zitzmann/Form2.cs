@@ -112,33 +112,33 @@ namespace Arbeitsplan_Zitzmann
 
                 string[] times = new string[4]; // gather times from cells
                 string[] time_diff = new string[2]; // time calculations
+                bool[] valid_cell = new bool[4]; // time validations
 
+                // run through all von-bis cells and filter them
                 for (int i = 0; i < 4; i++)
                 {
-                    times[i] = CellFilter(dataGridView1.Rows[row].Cells[i + 2].Value.ToString());
-                }
+                    times[i] = CellFilter(dataGridView1.Rows[row].Cells[i + 2].Value.ToString(), false); // filter string from cell
+                    
+                    switch(times[i]) // validation check
+                    {
+                        case "":
+                            valid_cell[i] = false;
+                            break;
+                        default:
+                            valid_cell[i] = true;
+                            break;
+                    }
 
-                if (times[0].Equals(" ") || times[1].Equals(" ")) // first time cells empty?
+                    dataGridView1.Rows[row].Cells[i + 2].Value = times[i];
+                }                
+                if (!(valid_cell[0]) || !(valid_cell[1])) // first time cells empty?
                 {
-                    // clear all time cells
-                    dataGridView1.Rows[row].Cells[2].Value = "";
-                    dataGridView1.Rows[row].Cells[3].Value = "";
-                    dataGridView1.Rows[row].Cells[4].Value = "";
-                    dataGridView1.Rows[row].Cells[5].Value = "";
-
                     dataGridView1.Rows[row].Cells[6].Value = "00:00";
-
                 }
                 else
                 {
-                    if (times[2].Equals(" ") || times[3].Equals(" ")) // second time cells empty? => calculate first time cells only!
+                    if (!(valid_cell[2]) || !(valid_cell[3])) // second time cells empty? => calculate first time cells only!
                     {
-                        // clear second time cells; try to correct first time cells
-                        dataGridView1.Rows[row].Cells[2].Value = times[0];
-                        dataGridView1.Rows[row].Cells[3].Value = times[1];
-                        dataGridView1.Rows[row].Cells[4].Value = "";
-                        dataGridView1.Rows[row].Cells[5].Value = "";
-
                         string[] time1 = new string[2], time2 = new string[2];
                         time1[0] = times[0].Split(':')[0]; // hh:
                         time1[1] = times[0].Split(':')[1]; // :mm
@@ -152,12 +152,6 @@ namespace Arbeitsplan_Zitzmann
                     }
                     else // calculate both time cells!
                     {
-                        // try to correct first and second time cells
-                        dataGridView1.Rows[row].Cells[2].Value = times[0];
-                        dataGridView1.Rows[row].Cells[3].Value = times[1];
-                        dataGridView1.Rows[row].Cells[4].Value = times[2];
-                        dataGridView1.Rows[row].Cells[5].Value = times[3];
-
                         string[] time1 = new string[2], time2 = new string[2];
                         time1[0] = times[0].Split(':')[0]; // hh:
                         time1[1] = times[0].Split(':')[1]; // :mm
@@ -289,6 +283,12 @@ namespace Arbeitsplan_Zitzmann
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
 
+            // prevent user to manually resize columns
+            dataGridView1.AllowUserToResizeColumns = false;
+
+            // prevent user from adding rows manually
+            dataGridView1.AllowUserToAddRows = false;
+
             int row_counter = 0; // amount of total rows created
 
             // create each row
@@ -352,7 +352,7 @@ namespace Arbeitsplan_Zitzmann
                 // if (Saturday (Day 6) OR Sunday (Day 0)) => disable row, remove the rest operations
                 if (((int)date.DayOfWeek == 6) || ((int)date.DayOfWeek == 0))
                 {
-                    // mark blocked cells
+                    // mark blocked cells; in this case, all cells
                     for (int j = 2; j < 9; j++)
                     {
                         _insert[j] = blocker;
@@ -375,29 +375,24 @@ namespace Arbeitsplan_Zitzmann
                 {
                     // => last column stays empty
 
-                    // Istzeit
+                    // assign cell values from file to table row + filters them
+                    for (int j = 0; j < 4; j++)
+                    {
+                        _insert[j + 2] = CellFilter(split_line[j], false);
+                    }
+
 
                     if (split_line[0].Equals(" ") || split_line[1].Equals(" ") || split_line[0].Length < 5 || split_line[1].Length < 5) // first time cells empty?
                     {
-                        // clear all time cells
-                        _insert[2] = "";
-                        _insert[3] = "";
+                        // clear second time cells (since logically, first ones should be existant for valid row)
                         _insert[4] = "";
                         _insert[5] = "";
-
                         _insert[6] = "00:00";
-
                     }
                     else
                     {
                         if (split_line[2].Equals(" ") || split_line[3].Equals(" ") || split_line[2].Length < 5 || split_line[3].Length < 5) // second time cells empty? => calculate first time cells only!
                         {
-                            // only set first time cells
-                            _insert[2] = split_line[0];
-                            _insert[3] = split_line[1];
-                            _insert[4] = ""; // clear second time cells
-                            _insert[5] = "";
-
                             var hrs_min = line.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(':')).ToArray(); // splits the read string (per line) twice
 
                             string[] time1 = new string[2], time2 = new string[2];
@@ -413,12 +408,6 @@ namespace Arbeitsplan_Zitzmann
                         }
                         else // calculate both time cells!
                         {
-                            // set all cells
-                            _insert[2] = split_line[0];
-                            _insert[3] = split_line[1];
-                            _insert[4] = split_line[2];
-                            _insert[5] = split_line[3];
-
                             var hrs_min = line.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(':')).ToArray(); // splits the read string (per line) twice
 
                             string[] time1 = new string[2], time2 = new string[2];
@@ -477,11 +466,21 @@ namespace Arbeitsplan_Zitzmann
                 }
 
                 // calculate difference between Sollzeit and Istzeit if content available
-                string t1 = "00:00", t2 = "00:00"; // initialize Ist-/Sollzeit cells as strings
+                string t1 = "", t2 = ""; // initialize Ist-/Sollzeit cells as strings
                 if (!(_insert[6].Equals(blocker)) || !(_insert[7].Equals(blocker))) // check if any of those are blocked!
                 {
-                    t1 = readTimeFromCell(_insert[6]);
-                    t2 = readTimeFromCell(_insert[7]);
+                    t1 = checkTimeFromCell(_insert[6]);
+                    t2 = checkTimeFromCell(_insert[7]);
+
+                    if (t1.Equals(" "))
+                    {
+                        t1 = "00:00";
+                    }
+
+                    if (t1.Equals(" "))
+                    {
+                        t2 = "00:00";
+                    }
                 }
 
                 string[] difference = calcTimeDifference(t1.Split(':'), t2.Split(':'), true); // split strings for hh:mm
@@ -621,7 +620,8 @@ namespace Arbeitsplan_Zitzmann
             return result;
         }
 
-        private string readTimeFromCell(string readString)
+        // method parses hh:mm to check for valid number values (necessary? => see CellFilter()) // REMOVE THIS + REPLACE WITH CellFilter()
+        private string checkTimeFromCell(string readString)
         {
             try
             {
@@ -633,11 +633,24 @@ namespace Arbeitsplan_Zitzmann
                     int value;
                     if (Int32.TryParse(intString, out value) && counter == 0) // try to parse hh:
                     {
-                        readString = value + ":"; // if hour is valid, it gets put in
+                        if (value > 23 || value < 0)
+                        {
+                            throw new Exception();
+                        } else
+                        {
+                            readString = value + ":"; // if hour is valid, it gets put in
+                        }
                     }
                     else if (Int32.TryParse(intString, out value) && counter > 0) // try to parse :mm
                     {
-                        readString += value;
+                        if (value > 59 || value < 0)
+                        {
+                            throw new Exception();
+                        }
+                        else
+                        {
+                            readString += value; // if hour is valid, it gets put in
+                        }
                     }
                     else
                     {
@@ -647,41 +660,63 @@ namespace Arbeitsplan_Zitzmann
                 }
             } catch (Exception excp) when (excp is FormatException || excp is Exception) // if Format invalid of manual exception is thrown: run catch-block
             {
-                return "00:00";
+                return " "; // empty return
             }
 
             return readString;
         }
 
         // method checks if cell is blocked, empty or invalid; returns cell value if valid
-        private string CellFilter(string readString)
+        private string CellFilter(string readString, bool useWhiteSpace)
         {
-            if (readString == null || readString.Equals(blocker) || readString.Length == 0) // checks if readString equals the blocker-string or is invalid in length
+            string invalid_ret = "";    // empty string for output on filtering invalid times
+            short separator_exists = 0; // counts the separator ':'
+
+            // adds a spacebar dependent on bool-param; determines empty cell value and file-entry-value for time cells
+            switch(useWhiteSpace)
             {
-                return " "; // return space symbol if cell is blocked/empty/invalid
+                case true:
+                    invalid_ret = " ";
+                    break;
+                default:
+                    break;
+
+            }
+
+            if (readString == null || readString.Equals(" ") || readString.Equals(blocker) || readString.Length == 0 || readString.Length > 5) // checks if readString equals the blocker-string or is invalid in length
+            {
+                return invalid_ret; // return space symbol if cell is blocked/empty/invalid
             }
 
             for (int i = 0; i < readString.Length; i++) // checks for correct symbols additionally
             {
-                int symbol = (int) readString[i] - 48; // convert symbol to ASCII minus 48 (for true number values)
+                int symbol = ((int) readString[i]) - 48; // convert symbol to ASCII minus 48 (for true number values)
 
-                if ((i == 1 || i == 2) && symbol == 10){} // ASCII 10 = ':' // check if seperator is on third (occasionally second) spot
-                else if ((symbol > 9 || symbol < 0)) // check for valid number between 0-9
+                if ((i == 1 || i == 2) && symbol == 10) // ASCII 10 = ':' // check if seperator is on third (occasionally second) spot
                 {
-                    return " ";
-                }
-
-                // correct cells for proper consistency on the output
-                if (readString.Split(':')[0].Length < 2)
+                    separator_exists += 1; // increases separator-counter
+                } 
+                else if (symbol > 9 || symbol < 0) // check for valid number between 0-9
                 {
-                    readString = "0" + readString; // 0h:mm
-                }
-
-                if (readString.Split(':')[1].Length < 2)
-                {
-                    readString = readString.Split(':')[0] + ":0" + readString.Split(':')[1]; // hh:0m
+                    return invalid_ret;
                 }
             }
+
+            // final check of valid values and (precautiously) symbols + return if separator-count is invalid
+            if (separator_exists != 1 || checkTimeFromCell(readString).Equals(" ")) { return invalid_ret; }
+
+            // correct cells for proper consistency on the output
+            if (readString.Split(':')[0].Length < 2)
+            {
+                readString = "0" + readString; // 0h:mm
+            }
+
+            if (readString.Split(':')[1].Length < 2)
+            {
+                readString = readString.Split(':')[0] + ":0" + readString.Split(':')[1]; // hh:0m
+            }
+
+            // check for valid times
 
             return readString;
         }
@@ -691,30 +726,15 @@ namespace Arbeitsplan_Zitzmann
             //Console.WriteLine("DataGridView contains " + dataGridView1.Rows.Count + " rows. " + daysInMonth + " of these rows have been created.");
             StreamWriter sw = new StreamWriter(Arbeitsplan.fpathString); // writer for file
 
-            for (int row = 0; row < daysInMonth; row++) // not using dataGridView1.Rows.Count because it adds up one unnecessary row; remain with the valid row amount
+            for (int row = 0; row < daysInMonth; row++) // iterate through rows to save each row individually
             {
                 string saveString = ""; // initialize string to write per line
+                string filter_string; // string to filter cell and gain a proper value
+
                 for (int col = 0; col < 5; col++) // read the 5 columns and create 5 file entries seperated by semicolons (csv)
                 {
-                    string block_string; // string that turns into a space-symbol if checked cell is blocked; else: copies cell value
-                    switch (col)
+                    switch (col) // saves filtered strings as entries for file and reads combobox value from last column
                     {
-                        case 0:
-                            block_string = CellFilter(dataGridView1.Rows[row].Cells[2].Value.ToString()); // method to modify block_string
-                            saveString += block_string + ";";
-                            break;
-                        case 1:
-                            block_string = CellFilter(dataGridView1.Rows[row].Cells[3].Value.ToString());
-                            saveString += block_string + ";";
-                            break;
-                        case 2:
-                            block_string = CellFilter(dataGridView1.Rows[row].Cells[4].Value.ToString());
-                            saveString += block_string + ";";
-                            break;
-                        case 3:
-                            block_string = CellFilter(dataGridView1.Rows[row].Cells[5].Value.ToString());
-                            saveString += block_string + ";";
-                            break;
                         case 4:
                             switch (dataGridView1.Rows[row].Cells[dataGridView1.Columns[9].Name].Value) // read combobox by value
                             {
@@ -736,7 +756,8 @@ namespace Arbeitsplan_Zitzmann
                             }
                             break;
                         default:
-                            saveString = " ; ; ; ;0"; // default string for empty row
+                            filter_string = CellFilter(dataGridView1.Rows[row].Cells[col + 2].Value.ToString(), true); // filter all 4 time cells
+                            saveString += filter_string + ";";
                             break;
                     }
                 }
@@ -746,26 +767,5 @@ namespace Arbeitsplan_Zitzmann
 
             sw.Close(); // close writer
         }
-
-        private void calc_label_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// -> Check, ob value für cell leer ist
-/* foreach (DataGridViewRow rw in this.dataGridView1.Rows)
-{
-  for (int i = 0; i<rw.Cells.Count; i++)
-  {
-    if (rw.Cells[i].Value == null || rw.Cells[i].Value == DBNull.Value || String.IsNullOrWhiteSpace(rw.Cells[i].Value.ToString())
-    {
-      // here is your message box...
-    }
-  } 
-}
-    */
