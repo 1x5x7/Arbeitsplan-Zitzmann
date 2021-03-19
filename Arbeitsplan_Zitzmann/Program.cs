@@ -8,15 +8,25 @@ namespace Arbeitsplan_Zitzmann
 {
     static class Program
     {
-        // current version of Mar. 2021
-        public static string version = "1.0";
+        // current version of program
+        public static string VERSION = "1.1";
 
-        public static System.DateTime current_time = System.DateTime.Now;
-        public static int version_year = current_time.Year; // determine current year
+        // main path for program
+        public static string PATHSTRING = @"C:\ProgramData\Arbeitsplan\";
 
-        public static Arbeitsplan menu = new Arbeitsplan();
-        public static Arbeitsplan_Tabelle table = new Arbeitsplan_Tabelle();
-        public static Arbeitsplan_Einstellungen settings = new Arbeitsplan_Einstellungen();
+        // earliest year allowed to create tables in
+        public static int STARTING_YEAR = 2021;
+
+        // current date for specific time-related operations
+        public static System.DateTime CURRENT_TIME = System.DateTime.Now;
+
+        // strings for editing, filtering, checking, etc.
+        public static string EMPTY = ""; // empty string
+        public static string WHITESPACE = " "; // whitespace symbol
+        public static string BLOCKER = "//////"; // string for blocking cells
+
+        public static Arbeitsplan Form_menu = new Arbeitsplan();
+        public static Arbeitsplan_Tabelle Form_table = new Arbeitsplan_Tabelle();
 
         [STAThread]
         static void Main()
@@ -24,9 +34,7 @@ namespace Arbeitsplan_Zitzmann
             Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false); // TextRenderingDefault is automatically set false / causes errors
 
-            Application.Run(menu);
+            Application.Run(Form_menu);
         }
     }
-
-
 }

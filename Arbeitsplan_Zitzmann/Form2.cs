@@ -15,10 +15,10 @@ namespace Arbeitsplan_Zitzmann
     public partial class Arbeitsplan_Tabelle : Form
     {
         private string[] m_nameCol = { "Datum", "Tag", "von", "bis", "Istzeit", "Sollzeit", "Differenz", "Abwesenheit" };
-        private string[] m_zeiten = { "09:00", "09:00", "05:30", "09:00", "06:00" }; // Einstellungen hinzufügen und Arbeitstage manuell mit Zeiten anpassen!
         private int daysInMonth = 0; // total days in month; keep 0 until Form1 initializes month
-        string blocker = "//////"; // string for blocking cells
         DateTime date = DateTime.Now; // current date
+
+        // METHOD: Ask user to save; FormClosing = Saving table into file
 
         public Arbeitsplan_Tabelle()
         {
@@ -31,7 +31,7 @@ namespace Arbeitsplan_Zitzmann
             this.FormClosed += new FormClosedEventHandler(Arbeitsplan_Tabelle_FormClosed);
 
             // initializations
-            daysInMonth = DateTime.DaysInMonth(Program.version_year, Arbeitsplan.month); // set total days in month upon loading Form (which is AFTER retrieving the month from previous Form!)
+            daysInMonth = DateTime.DaysInMonth(Program.CURRENT_TIME.Year, Arbeitsplan.month); // set total days in month upon loading Form (which is AFTER retrieving the month from previous Form!)
 
             // check file for existing content => empty file gets filled with empty entries
             if (IsTextFileEmpty(Arbeitsplan.fpathString))
@@ -39,14 +39,34 @@ namespace Arbeitsplan_Zitzmann
                 createNewFile(Arbeitsplan.fpathString);
             }
 
-            create_table();
+            create_Table();
         }
-
-        // METHOD: Ask user to save; FormClosing = Saving table into file
 
         private void Arbeitsplan_Tabelle_FormClosed(object sender, FormClosedEventArgs e)
         {
             System.Windows.Forms.Application.Exit();
+        }
+
+        // calculate each line individually
+        private void calc_button_Click(object sender, EventArgs e)
+        {
+            for (int row = 0; row < daysInMonth; row++) // iterate through each row
+            {
+                string status = Program.EMPTY + dataGridView1.Rows[row].Cells[dataGridView1.Columns[9].Name].Value; // Abwesenheit = status
+                if (status.Length == 0 || status.Equals(Program.WHITESPACE))
+                {
+                    calc_existing_row(row); // calculate cell values (if possible)
+                } else // block time cells
+                {
+                    dataGridView1.Rows[row].Cells[2].Value = Program.BLOCKER;
+                    dataGridView1.Rows[row].Cells[3].Value = Program.BLOCKER;
+                    dataGridView1.Rows[row].Cells[4].Value = Program.BLOCKER;
+                    dataGridView1.Rows[row].Cells[5].Value = Program.BLOCKER;
+                    dataGridView1.Rows[row].Cells[6].Value = Program.BLOCKER;
+                    dataGridView1.Rows[row].Cells[7].Value = Program.BLOCKER;
+                    dataGridView1.Rows[row].Cells[8].Value = "00:00";
+                }
+            }
         }
         public static bool IsTextFileEmpty(string fileName)
         {
@@ -63,37 +83,9 @@ namespace Arbeitsplan_Zitzmann
             return false;
         }
 
-        private void save_button_Click(object sender, EventArgs e)
-        {
-            save_table();
-            MessageBox.Show("Ihre Tabelle wurde erfolgreich gespeichert.");
-        }
-
-        // calculate each line individually
-        private void calc_button_Click(object sender, EventArgs e)
-        {
-            for (int row = 0; row < daysInMonth; row++) // iterate through each row
-            {
-                string status = "" + dataGridView1.Rows[row].Cells[dataGridView1.Columns[9].Name].Value; // Abwesenheit = status
-                if (status.Length == 0 || status.Equals(" "))
-                {
-                    calc_existing_row(row); // calculate cell values (if possible)
-                } else // block time cells
-                {
-                    dataGridView1.Rows[row].Cells[2].Value = blocker;
-                    dataGridView1.Rows[row].Cells[3].Value = blocker;
-                    dataGridView1.Rows[row].Cells[4].Value = blocker;
-                    dataGridView1.Rows[row].Cells[5].Value = blocker;
-                    dataGridView1.Rows[row].Cells[6].Value = blocker;
-                    dataGridView1.Rows[row].Cells[7].Value = blocker;
-                    dataGridView1.Rows[row].Cells[8].Value = "00:00";
-                }
-            }
-        }
-
         private void calc_existing_row(int row)
         {
-            date = new DateTime(Program.version_year, Arbeitsplan.month, row + 1); // get date for row's day
+            date = new DateTime(Program.CURRENT_TIME.Year, Arbeitsplan.month, row + 1); // get date for row's day
             int day = (int)date.DayOfWeek;
             // check if day is NOT on weekend! => weekends stay blocked
             if (day != 6 && day != 0)
@@ -101,14 +93,14 @@ namespace Arbeitsplan_Zitzmann
                 // clear all blocked cells (since their status is clean)
                 for (int i = 2; i < 6; i++)
                 {
-                    if (dataGridView1.Rows[row].Cells[i].Value == null || dataGridView1.Rows[row].Cells[i].Value.Equals(blocker))
+                    if (dataGridView1.Rows[row].Cells[i].Value == null || dataGridView1.Rows[row].Cells[i].Value.Equals(Program.BLOCKER))
                     {
-                        dataGridView1.Rows[row].Cells[i].Value = "";
+                        dataGridView1.Rows[row].Cells[i].Value = Program.EMPTY;
                     }
                 }
 
                 // Sollzeit has to be adjusted out of the loop
-                dataGridView1.Rows[row].Cells[7].Value = m_zeiten[day - 1];
+                dataGridView1.Rows[row].Cells[7].Value = Arbeitsplan.times[day - 1];
 
                 string[] times = new string[4]; // gather times from cells
                 string[] time_diff = new string[2]; // time calculations
@@ -235,7 +227,7 @@ namespace Arbeitsplan_Zitzmann
             sw.Close();
         }
 
-        private void create_table()
+        private void create_Table()
         {
             string[] _insert = null; // initialize row(s)
 
@@ -261,15 +253,14 @@ namespace Arbeitsplan_Zitzmann
             }
 
             // create last column manually as combobox
-
             DataGridViewComboBoxColumn abwesenheit = new DataGridViewComboBoxColumn();
             {
 
                 // set header name of column
                 abwesenheit.Name = m_nameCol[7];
 
-                // add items into column
-                abwesenheit.Items.AddRange(" ", "Krank", "Urlaub/Frei", "Betriebsurlaub", "Feiertag");
+                // add items to column
+                abwesenheit.Items.AddRange(Program.WHITESPACE, "Frei", "Krank", "Urlaubstag", "Betriebsurlaub", "Feiertag");
             }
 
             dataGridView1.Columns.Add(abwesenheit);
@@ -295,7 +286,7 @@ namespace Arbeitsplan_Zitzmann
             for (int i = 0; i < daysInMonth; i++)
             {
                 StreamReader sr = new StreamReader(Arbeitsplan.fpathString); ; // initialize StreamReader to enable file-reading
-                string line = ""; // placeholder string for StreamReader; iterates through file
+                string line = Program.EMPTY; // placeholder string for StreamReader; iterates through file
                 string[] split_line = new string[5]; // string with 5 entries when correct line found
                 _insert = new string[9]; // configure _insert for 9 text(!) columns
                 bool abwesenheit_aktiv = false; // check if last cell is active
@@ -317,7 +308,7 @@ namespace Arbeitsplan_Zitzmann
                 sr.Close(); // close StreamReader
 
                 // declare date for further functions such as DayOfWeek and reading the month
-                date = new DateTime(Program.version_year, Arbeitsplan.month, i + 1);
+                date = new DateTime(Program.CURRENT_TIME.Year, Arbeitsplan.month, i + 1);
 
                 // Allgemeine Generierung von Datum/Tag für jede Tabelle
                 _insert[0] = ((i + 1) + "." + Arbeitsplan.month); // Datum
@@ -327,22 +318,22 @@ namespace Arbeitsplan_Zitzmann
                 switch (_insert[1])
                 {
                     case "Mo.":
-                        _insert[7] = m_zeiten[0];
+                        _insert[7] = Arbeitsplan.times[0];
                         break;
                     case "Di.":
-                        _insert[7] = m_zeiten[1];
+                        _insert[7] = Arbeitsplan.times[1];
                         break;
                     case "Mi.":
-                        _insert[7] = m_zeiten[2];
+                        _insert[7] = Arbeitsplan.times[2];
                         break;
                     case "Do.":
-                        _insert[7] = m_zeiten[3];
+                        _insert[7] = Arbeitsplan.times[3];
                         break;
                     case "Fr.":
-                        _insert[7] = m_zeiten[4];
+                        _insert[7] = Arbeitsplan.times[4];
                         break;
                     default:
-                        _insert[7] = "FREI";
+                        _insert[7] = "00:00";
                         break;
                 }
 
@@ -355,18 +346,19 @@ namespace Arbeitsplan_Zitzmann
                     // mark blocked cells; in this case, all cells
                     for (int j = 2; j < 9; j++)
                     {
-                        _insert[j] = blocker;
+                        _insert[j] = Program.BLOCKER;
                     }
 
-                    // => last column stays empty
-
+                    // => last column stays empty and row for weekday remains un-editable
+                    //dataGridView1.Rows[i].ReadOnly = true;
+                    // FIRST COLLECT ALL ROWS => INSERT INTO TABLE WITH CONSIDERING Abwesenheit AND Wochentag ///////////////////////////////////////////////////////////
                 }
                 else if ((abwesenheit_value > 0)) // if Abwesenheit
                 {
                     // mark blocked cells
                     for (int j = 2; j < 9; j++)
                     {
-                        _insert[j] = blocker;
+                        _insert[j] = Program.BLOCKER;
                     }
 
                     abwesenheit_aktiv = true;
@@ -382,16 +374,16 @@ namespace Arbeitsplan_Zitzmann
                     }
 
 
-                    if (split_line[0].Equals(" ") || split_line[1].Equals(" ") || split_line[0].Length < 5 || split_line[1].Length < 5) // first time cells empty?
+                    if (split_line[0].Equals(Program.WHITESPACE) || split_line[1].Equals(Program.WHITESPACE) || split_line[0].Length < 5 || split_line[1].Length < 5) // first time cells empty?
                     {
                         // clear second time cells (since logically, first ones should be existant for valid row)
-                        _insert[4] = "";
-                        _insert[5] = "";
+                        _insert[4] = Program.EMPTY;
+                        _insert[5] = Program.EMPTY;
                         _insert[6] = "00:00";
                     }
                     else
                     {
-                        if (split_line[2].Equals(" ") || split_line[3].Equals(" ") || split_line[2].Length < 5 || split_line[3].Length < 5) // second time cells empty? => calculate first time cells only!
+                        if (split_line[2].Equals(Program.WHITESPACE) || split_line[3].Equals(Program.WHITESPACE) || split_line[2].Length < 5 || split_line[3].Length < 5) // second time cells empty? => calculate first time cells only!
                         {
                             var hrs_min = line.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(':')).ToArray(); // splits the read string (per line) twice
 
@@ -466,18 +458,18 @@ namespace Arbeitsplan_Zitzmann
                 }
 
                 // calculate difference between Sollzeit and Istzeit if content available
-                string t1 = "", t2 = ""; // initialize Ist-/Sollzeit cells as strings
-                if (!(_insert[6].Equals(blocker)) || !(_insert[7].Equals(blocker))) // check if any of those are blocked!
+                string t1 = Program.EMPTY, t2 = Program.EMPTY; // initialize Ist-/Sollzeit cells as strings
+                if (!(_insert[6].Equals(Program.BLOCKER)) || !(_insert[7].Equals(Program.BLOCKER))) // check if any of those are blocked!
                 {
                     t1 = checkTimeFromCell(_insert[6]);
                     t2 = checkTimeFromCell(_insert[7]);
 
-                    if (t1.Equals(" "))
+                    if (t1.Equals(Program.WHITESPACE))
                     {
                         t1 = "00:00";
                     }
 
-                    if (t1.Equals(" "))
+                    if (t1.Equals(Program.WHITESPACE))
                     {
                         t2 = "00:00";
                     }
@@ -491,7 +483,7 @@ namespace Arbeitsplan_Zitzmann
 
                 if (abwesenheit_aktiv)
                 {
-                    // (!) EXISTING BUG: first item in the Combobox (in this case: " " at Index 0) not able to be applied, everything >0 will work!
+                    // (!) EXISTING BUG: first item in the Combobox (in this case: Program.WHITESPACE at Index 0) not able to be applied, everything >0 will work!
                     dataGridView1.Rows[row_counter].Cells[dataGridView1.Columns[9].Name].Value = (dataGridView1.Rows[row_counter].Cells[dataGridView1.Columns[9].Name] as DataGridViewComboBoxCell).Items[abwesenheit_value];
                 }
                 row_counter++;
@@ -598,15 +590,15 @@ namespace Arbeitsplan_Zitzmann
                     } else if (hours_diff < 10)              // 0h:mm
                     {
                         result[0] = "0" + hours_diff;
-                        result[1] = "" + minute_diff;
+                        result[1] = Program.EMPTY + minute_diff;
                     } else if (minute_diff < 10)              // hh:m
                     {
-                        result[0] = "" + hours_diff;
+                        result[0] = Program.EMPTY + hours_diff;
                         result[1] = "0" + minute_diff;
                     } else                                    // hh:mm
                     {
-                        result[0] = "" + hours_diff;
-                        result[1] = "" + minute_diff;
+                        result[0] = Program.EMPTY + hours_diff;
+                        result[1] = Program.EMPTY + minute_diff;
                     }
                 }
             }
@@ -660,30 +652,30 @@ namespace Arbeitsplan_Zitzmann
                 }
             } catch (Exception excp) when (excp is FormatException || excp is Exception) // if Format invalid of manual exception is thrown: run catch-block
             {
-                return " "; // empty return
+                return Program.WHITESPACE; // empty return
             }
 
             return readString;
         }
 
         // method checks if cell is blocked, empty or invalid; returns cell value if valid
-        private string CellFilter(string readString, bool useWhiteSpace)
+        public string CellFilter(string readString, bool useWhiteSpaceAsReturn)
         {
-            string invalid_ret = "";    // empty string for output on filtering invalid times
+            string invalid_ret = Program.EMPTY;    // empty string for output on filtering invalid times
             short separator_exists = 0; // counts the separator ':'
 
             // adds a spacebar dependent on bool-param; determines empty cell value and file-entry-value for time cells
-            switch(useWhiteSpace)
+            switch(useWhiteSpaceAsReturn)
             {
                 case true:
-                    invalid_ret = " ";
+                    invalid_ret = Program.WHITESPACE;
                     break;
                 default:
                     break;
 
             }
 
-            if (readString == null || readString.Equals(" ") || readString.Equals(blocker) || readString.Length == 0 || readString.Length > 5) // checks if readString equals the blocker-string or is invalid in length
+            if (readString == null || readString.Equals(Program.WHITESPACE) || readString.Equals(Program.BLOCKER) || readString.Length == 0 || readString.Length > 5) // checks if readString equals the Program.BLOCKER-string or is invalid in length
             {
                 return invalid_ret; // return space symbol if cell is blocked/empty/invalid
             }
@@ -703,7 +695,7 @@ namespace Arbeitsplan_Zitzmann
             }
 
             // final check of valid values and (precautiously) symbols + return if separator-count is invalid
-            if (separator_exists != 1 || checkTimeFromCell(readString).Equals(" ")) { return invalid_ret; }
+            if (separator_exists != 1 || checkTimeFromCell(readString).Equals(Program.WHITESPACE)) { return invalid_ret; }
 
             // correct cells for proper consistency on the output
             if (readString.Split(':')[0].Length < 2)
@@ -728,7 +720,7 @@ namespace Arbeitsplan_Zitzmann
 
             for (int row = 0; row < daysInMonth; row++) // iterate through rows to save each row individually
             {
-                string saveString = ""; // initialize string to write per line
+                string saveString = Program.EMPTY; // initialize string to write per line
                 string filter_string; // string to filter cell and gain a proper value
 
                 for (int col = 0; col < 5; col++) // read the 5 columns and create 5 file entries seperated by semicolons (csv)
@@ -766,6 +758,12 @@ namespace Arbeitsplan_Zitzmann
             }
 
             sw.Close(); // close writer
+        }
+
+        private void save_button_Click(object sender, EventArgs e)
+        {
+            save_table();
+            MessageBox.Show("Ihre Tabelle wurde erfolgreich gespeichert.");
         }
     }
 }

@@ -29,46 +29,51 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Arbeitsplan));
-            this.which_user_label = new System.Windows.Forms.Label();
-            this.user_selection_combobox = new System.Windows.Forms.ComboBox();
-            this.which_month_label = new System.Windows.Forms.Label();
-            this.month_selection_combobox = new System.Windows.Forms.ComboBox();
-            this.create_table_button = new System.Windows.Forms.Button();
-            this.creator_tag = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.label_user = new System.Windows.Forms.Label();
+            this.combobox_userSelection = new System.Windows.Forms.ComboBox();
+            this.label_whichMonth = new System.Windows.Forms.Label();
+            this.combobox_month = new System.Windows.Forms.ComboBox();
+            this.button_createTable = new System.Windows.Forms.Button();
+            this.label_creator = new System.Windows.Forms.Label();
+            this.button_settings = new System.Windows.Forms.Button();
+            this.combobox_year = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
-            // which_user_label
+            // label_user
             // 
-            this.which_user_label.AutoSize = true;
-            this.which_user_label.Location = new System.Drawing.Point(189, 122);
-            this.which_user_label.Name = "which_user_label";
-            this.which_user_label.Size = new System.Drawing.Size(289, 13);
-            this.which_user_label.TabIndex = 0;
-            this.which_user_label.Text = "Welcher Benutzer möchte auf seinen Arbeitsplan zugreifen?";
+            this.label_user.AutoSize = true;
+            this.label_user.Location = new System.Drawing.Point(193, 122);
+            this.label_user.Name = "label_user";
+            this.label_user.Size = new System.Drawing.Size(289, 13);
+            this.label_user.TabIndex = 0;
+            this.label_user.Text = "Welcher Benutzer möchte auf seinen Arbeitsplan zugreifen?";
             // 
-            // user_selection_combobox
+            // combobox_userSelection
             // 
-            this.user_selection_combobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.user_selection_combobox.Location = new System.Drawing.Point(192, 138);
-            this.user_selection_combobox.Name = "user_selection_combobox";
-            this.user_selection_combobox.Size = new System.Drawing.Size(286, 21);
-            this.user_selection_combobox.TabIndex = 1;
+            this.combobox_userSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_userSelection.Enabled = false;
+            this.combobox_userSelection.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.combobox_userSelection.Location = new System.Drawing.Point(195, 138);
+            this.combobox_userSelection.MaxDropDownItems = 32;
+            this.combobox_userSelection.Name = "combobox_userSelection";
+            this.combobox_userSelection.Size = new System.Drawing.Size(286, 21);
+            this.combobox_userSelection.TabIndex = 1;
             // 
-            // which_month_label
+            // label_whichMonth
             // 
-            this.which_month_label.AutoSize = true;
-            this.which_month_label.Location = new System.Drawing.Point(208, 191);
-            this.which_month_label.Name = "which_month_label";
-            this.which_month_label.Size = new System.Drawing.Size(255, 26);
-            this.which_month_label.TabIndex = 2;
-            this.which_month_label.Text = "Möchten Sie auf einen bestimmten Monat zugreifen?\r\n                        (leer " +
+            this.label_whichMonth.AutoSize = true;
+            this.label_whichMonth.Location = new System.Drawing.Point(210, 191);
+            this.label_whichMonth.Name = "label_whichMonth";
+            this.label_whichMonth.Size = new System.Drawing.Size(255, 26);
+            this.label_whichMonth.TabIndex = 2;
+            this.label_whichMonth.Text = "Möchten Sie auf einen bestimmten Monat zugreifen?\r\n                        (leer " +
     "= aktueller Monat)";
             // 
-            // month_selection_combobox
+            // combobox_month
             // 
-            this.month_selection_combobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.month_selection_combobox.Items.AddRange(new object[] {
+            this.combobox_month.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_month.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.combobox_month.Items.AddRange(new object[] {
             "Januar",
             "Februar",
             "März",
@@ -81,61 +86,79 @@
             "Oktober",
             "November",
             "Dezember"});
-            this.month_selection_combobox.Location = new System.Drawing.Point(235, 220);
-            this.month_selection_combobox.Name = "month_selection_combobox";
-            this.month_selection_combobox.Size = new System.Drawing.Size(210, 21);
-            this.month_selection_combobox.TabIndex = 3;
+            this.combobox_month.Location = new System.Drawing.Point(233, 220);
+            this.combobox_month.MaxDropDownItems = 12;
+            this.combobox_month.Name = "combobox_month";
+            this.combobox_month.Size = new System.Drawing.Size(210, 21);
+            this.combobox_month.TabIndex = 3;
             // 
-            // create_table_button
+            // button_createTable
             // 
-            this.create_table_button.Location = new System.Drawing.Point(211, 282);
-            this.create_table_button.Name = "create_table_button";
-            this.create_table_button.Size = new System.Drawing.Size(252, 49);
-            this.create_table_button.TabIndex = 4;
-            this.create_table_button.Text = "Tabelle anzeigen";
-            this.create_table_button.UseVisualStyleBackColor = true;
-            this.create_table_button.Click += new System.EventHandler(this.create_table_button_Click);
+            this.button_createTable.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.button_createTable.Location = new System.Drawing.Point(212, 300);
+            this.button_createTable.Name = "button_createTable";
+            this.button_createTable.Size = new System.Drawing.Size(252, 49);
+            this.button_createTable.TabIndex = 4;
+            this.button_createTable.Text = "Tabelle anzeigen";
+            this.button_createTable.UseVisualStyleBackColor = true;
+            this.button_createTable.Click += new System.EventHandler(this.button_createTable_Click);
             // 
-            // creator_tag
+            // label_creator
             // 
-            this.creator_tag.AutoSize = true;
-            this.creator_tag.Font = new System.Drawing.Font("Lucida Sans Unicode", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.creator_tag.ForeColor = System.Drawing.Color.DimGray;
-            this.creator_tag.Location = new System.Drawing.Point(12, 413);
-            this.creator_tag.Name = "creator_tag";
-            this.creator_tag.Size = new System.Drawing.Size(153, 15);
-            this.creator_tag.TabIndex = 5;
-            this.creator_tag.Text = "Version X / Robert Schmidt";
+            this.label_creator.AutoSize = true;
+            this.label_creator.Font = new System.Drawing.Font("Lucida Sans Unicode", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_creator.ForeColor = System.Drawing.Color.DimGray;
+            this.label_creator.Location = new System.Drawing.Point(10, 413);
+            this.label_creator.Name = "label_creator";
+            this.label_creator.Size = new System.Drawing.Size(151, 15);
+            this.label_creator.TabIndex = 5;
+            this.label_creator.Text = "Version X | Robert Schmidt";
             // 
-            // button1
+            // button_settings
             // 
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(608, 388);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(40, 40);
-            this.button1.TabIndex = 6;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button_settings.BackColor = System.Drawing.Color.Transparent;
+            this.button_settings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button_settings.ForeColor = System.Drawing.Color.Transparent;
+            this.button_settings.Image = ((System.Drawing.Image)(resources.GetObject("button_settings.Image")));
+            this.button_settings.Location = new System.Drawing.Point(605, 386);
+            this.button_settings.Margin = new System.Windows.Forms.Padding(2);
+            this.button_settings.Name = "button_settings";
+            this.button_settings.Size = new System.Drawing.Size(45, 45);
+            this.button_settings.TabIndex = 6;
+            this.button_settings.UseVisualStyleBackColor = false;
+            this.button_settings.Click += new System.EventHandler(this.button_settings_Click);
+            // 
+            // combobox_year
+            // 
+            this.combobox_year.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combobox_year.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.combobox_year.FormattingEnabled = true;
+            this.combobox_year.Location = new System.Drawing.Point(278, 247);
+            this.combobox_year.Name = "combobox_year";
+            this.combobox_year.Size = new System.Drawing.Size(120, 21);
+            this.combobox_year.TabIndex = 7;
+            this.combobox_year.SelectedIndexChanged += new System.EventHandler(this.combobox_year_SelectedIndexChanged);
             // 
             // Arbeitsplan
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(659, 433);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.creator_tag);
-            this.Controls.Add(this.create_table_button);
-            this.Controls.Add(this.month_selection_combobox);
-            this.Controls.Add(this.which_month_label);
-            this.Controls.Add(this.user_selection_combobox);
-            this.Controls.Add(this.which_user_label);
+            this.ClientSize = new System.Drawing.Size(660, 433);
+            this.Controls.Add(this.combobox_year);
+            this.Controls.Add(this.button_settings);
+            this.Controls.Add(this.label_creator);
+            this.Controls.Add(this.button_createTable);
+            this.Controls.Add(this.combobox_month);
+            this.Controls.Add(this.label_whichMonth);
+            this.Controls.Add(this.combobox_userSelection);
+            this.Controls.Add(this.label_user);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Arbeitsplan";
+            this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Arbeitsplan (2021)";
+            this.Text = "Arbeitsplan";
             this.Load += new System.EventHandler(this.Arbeitsplan_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -144,13 +167,14 @@
 
         #endregion
 
-        private System.Windows.Forms.Label which_user_label;
-        private System.Windows.Forms.ComboBox user_selection_combobox;
-        private System.Windows.Forms.Label which_month_label;
-        private System.Windows.Forms.ComboBox month_selection_combobox;
-        private System.Windows.Forms.Button create_table_button;
-        private System.Windows.Forms.Label creator_tag;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label_user;
+        private System.Windows.Forms.Label label_whichMonth;
+        private System.Windows.Forms.ComboBox combobox_month;
+        private System.Windows.Forms.Button button_createTable;
+        private System.Windows.Forms.Label label_creator;
+        private System.Windows.Forms.Button button_settings;
+        public System.Windows.Forms.ComboBox combobox_userSelection;
+        private System.Windows.Forms.ComboBox combobox_year;
     }
 }
 

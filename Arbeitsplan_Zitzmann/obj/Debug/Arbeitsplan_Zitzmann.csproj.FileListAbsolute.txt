@@ -43,3 +43,4 @@ C:\Users\Robert Schmidt\Documents\GitHub\Arbeitsplan-Zitzmann\Arbeitsplan_Zitzma
 C:\Users\Robert Schmidt\Documents\GitHub\Arbeitsplan-Zitzmann\Arbeitsplan_Zitzmann\obj\Debug\Arbeitsplan_Zitzmann.pdb
 C:\Users\Robert Schmidt\Documents\GitHub\Arbeitsplan-Zitzmann\Arbeitsplan_Zitzmann\obj\Debug\Arbeitsplan_Zitzmann.csprojAssemblyReference.cache
 C:\Users\Robert Schmidt\Documents\GitHub\Arbeitsplan-Zitzmann\Arbeitsplan_Zitzmann\obj\Debug\Arbeitsplan_Zitzmann.Arbeitsplan_Einstellungen.resources
+C:\Users\Robert\Documents\GitHub\Arbeitsplan-Zitzmann\Arbeitsplan_Zitzmann\obj\Debug\Arbeitsplan_Zitzmann.Arbeitsplan_Einstellungen.resources

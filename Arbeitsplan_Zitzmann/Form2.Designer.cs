@@ -42,6 +42,7 @@
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.None;
@@ -50,6 +51,7 @@
             // 
             // save_button
             // 
+            this.save_button.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.save_button.Location = new System.Drawing.Point(1088, 12);
             this.save_button.Name = "save_button";
             this.save_button.Size = new System.Drawing.Size(145, 51);
@@ -60,6 +62,7 @@
             // 
             // calc_button
             // 
+            this.calc_button.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.calc_button.Location = new System.Drawing.Point(1088, 79);
             this.calc_button.Name = "calc_button";
             this.calc_button.Size = new System.Drawing.Size(145, 51);
@@ -83,7 +86,7 @@
             // 
             this.label_hinweis2.AutoSize = true;
             this.label_hinweis2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.label_hinweis2.Location = new System.Drawing.Point(9, 755);
+            this.label_hinweis2.Location = new System.Drawing.Point(62, 755);
             this.label_hinweis2.Name = "label_hinweis2";
             this.label_hinweis2.Size = new System.Drawing.Size(322, 13);
             this.label_hinweis2.TabIndex = 5;
