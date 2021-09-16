@@ -5,8 +5,8 @@ Dieses Programm ermöglicht die Bearbeitung und Speicherung von simplen, aber um
 gegebenen Arbeitszeiten die Istzeit, Sollzeit und Differenz für jeden Tag automatisch berechnen.
 Jeder Arbeitsplan bezieht sich auf einen spezifisch ausgewählten Monat (sowie Jahr).
 
-Alle Nutzer können individuell hinzugefügt sowie entfernt werden.
+Alle Nutzer können individuell hinzugefügt sowie entfernt und Arbeitszeiten für jeden Wochentag eingestellt werden.
 
 **Derzeit verfügbare Sprachen**: Deutsch
 
-Version 1.1 von Robert Schmidt
+Version 1.2 von Robert Schmidt

@@ -1,0 +1,12 @@
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\bin\Debug\Simple_Work_Scheduler.exe.config
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\bin\Debug\Simple_Work_Scheduler.exe
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\bin\Debug\Simple_Work_Scheduler.pdb
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.Arbeitsplan.resources
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.Arbeitsplan_Tabelle.resources
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.Arbeitsplan_Einstellungen.resources
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.Properties.Resources.resources
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.csproj.GenerateResource.cache
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.csproj.CoreCompileInputs.cache
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.exe
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.pdb
+C:\Users\Robert\Documents\GitHub\Simple-Work-Scheduler\Simple Work Scheduler\obj\Debug\Simple_Work_Scheduler.csproj.AssemblyReference.cache
